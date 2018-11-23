@@ -89,6 +89,9 @@ class lift:
                 GPIO.output(self.pin_1, GPIO.HIGH)
                 sleep(step)
                 self.nowLevel = toLevel
+    
+    def stop(self)
+        self.goto(0)
             
 
         
