@@ -51,7 +51,7 @@ class lift:
 
 
     def light(self, floor):
-        lightAllDim()
+        self.lightAllDim()
         if floor == 1:
             GPIO.output(self.led_1,GPIO.HIGH)
         elif floor == 2:
@@ -75,8 +75,8 @@ class lift:
         if toLevel == 0 :
             return 0
         else:
-            light(toLevel)
-            deltaLevel = toLevel - nowLevel
+            self.light(toLevel)
+            deltaLevel = toLevel - self.nowLevel
             if deltaLevel > 0:
                 GPIO.output(self.pin_3, GPIO.HIGH)
                 GPIO.output(self.pin_1, GPIO.LOW)
@@ -86,7 +86,7 @@ class lift:
                 GPIO.output(self.pin_3, GPIO.HIGH)
                 GPIO.output(self.pin_1, GPIO.HIGH)
                 sleep(step)
-                nowLevel = toLevel
+                self.nowLevel = toLevel
             
 
         
