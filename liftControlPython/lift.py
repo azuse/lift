@@ -81,7 +81,7 @@ class lift:
                 GPIO.output(self.pin_3, GPIO.HIGH)
                 GPIO.output(self.pin_1, GPIO.LOW)
                 sleep(step)
-                nowLevel = toLevel
+                self.nowLevel = toLevel
             else:
                 GPIO.output(self.pin_3, GPIO.HIGH)
                 GPIO.output(self.pin_1, GPIO.HIGH)
