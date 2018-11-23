@@ -1,43 +1,44 @@
 import RPi.GPIO as GPIO
 from time import sleep
 
-### lift control pin
-pin_1 = 12
-pin_2 = 16
-pin_3 = 18   #stop
-pin_4 = 22
-pin_high1 = 26
-pin_high2 = 32
-pin_high3 = 36
-state = 0
+def initial():
+    ### lift control pin
+    pin_1 = 12
+    pin_2 = 16
+    pin_3 = 18   #stop
+    pin_4 = 22
+    pin_high1 = 26
+    pin_high2 = 32
+    pin_high3 = 36
+    state = 0
 
-### led pin
-led_1 = 15
-led_2 = 23
-led_3 = 29
-led_4 = 31
-led_5 = 33
-led_6 = 37
+    ### led pin
+    led_1 = 15
+    led_2 = 23
+    led_3 = 29
+    led_4 = 31
+    led_5 = 33
+    led_6 = 37
 
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(pin_1,GPIO.OUT)
-GPIO.setup(pin_2,GPIO.OUT)
-GPIO.setup(pin_3,GPIO.OUT)
-GPIO.setup(pin_4,GPIO.OUT)
-GPIO.setup(pin_high1,GPIO.OUT)
-GPIO.setup(pin_high2,GPIO.OUT)
-GPIO.setup(pin_high3,GPIO.OUT)
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(pin_1,GPIO.OUT)
+    GPIO.setup(pin_2,GPIO.OUT)
+    GPIO.setup(pin_3,GPIO.OUT)
+    GPIO.setup(pin_4,GPIO.OUT)
+    GPIO.setup(pin_high1,GPIO.OUT)
+    GPIO.setup(pin_high2,GPIO.OUT)
+    GPIO.setup(pin_high3,GPIO.OUT)
 
-GPIO.setup(led_1,GPIO.OUT)
-GPIO.setup(led_2,GPIO.OUT)
-GPIO.setup(led_3,GPIO.OUT)
-GPIO.setup(led_4,GPIO.OUT)
-GPIO.setup(led_5,GPIO.OUT)
-GPIO.setup(led_6,GPIO.OUT)
+    GPIO.setup(led_1,GPIO.OUT)
+    GPIO.setup(led_2,GPIO.OUT)
+    GPIO.setup(led_3,GPIO.OUT)
+    GPIO.setup(led_4,GPIO.OUT)
+    GPIO.setup(led_5,GPIO.OUT)
+    GPIO.setup(led_6,GPIO.OUT)
 
-nowLevel = 1
+    nowLevel = 1
 
-step = 1
+    step = 1
 
 def lightAllDim():
     GPIO.output(led_1,GPIO.LOW)
