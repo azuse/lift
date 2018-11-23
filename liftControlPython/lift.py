@@ -13,7 +13,7 @@ state = 0
 
 ### led pin
 led_1 = 15
-led_2 = 27
+led_2 = 23
 led_3 = 29
 led_4 = 31
 led_5 = 33
