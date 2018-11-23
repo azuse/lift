@@ -22,7 +22,7 @@ class lift:
 
     nowLevel = 1
 
-    step = 1
+    step = 10
     
     def __init__(self):
         GPIO.setmode(GPIO.BOARD)
@@ -82,12 +82,12 @@ class lift:
             if deltaLevel > 0:
                 GPIO.output(self.pin_3, GPIO.HIGH)
                 GPIO.output(self.pin_1, GPIO.LOW)
-                sleep(step)
+                sleep(self.step)
                 self.nowLevel = toLevel
             else:
                 GPIO.output(self.pin_3, GPIO.HIGH)
                 GPIO.output(self.pin_1, GPIO.HIGH)
-                sleep(step)
+                sleep(self.step)
                 self.nowLevel = toLevel
             
 
