@@ -1,4 +1,4 @@
 import lift
 
-goto(3)
-goto(1)
+lift.goto(3)
+lift.goto(1)
