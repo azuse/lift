@@ -20,6 +20,10 @@ class lift:
     led_5 = 33
     led_6 = 37
 
+    nowLevel = 1
+
+    step = 1
+    
     def __init__(self):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.pin_1,GPIO.OUT)
@@ -37,9 +41,7 @@ class lift:
         GPIO.setup(self.led_5,GPIO.OUT)
         GPIO.setup(self.led_6,GPIO.OUT)
 
-        nowLevel = 1
 
-        step = 1
 
     def lightAllDim(self):
         GPIO.output(self.led_1,GPIO.LOW)
