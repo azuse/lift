@@ -13,7 +13,7 @@ state = 0
 
 ### led pin
 led_1 = 15
-led_2 = 27
+led_2 = 23
 led_3 = 29
 led_4 = 31
 led_5 = 33
@@ -48,7 +48,7 @@ def lightAllDim():
     GPIO.output(led_4,GPIO.LOW)
 
 
-def light(toLevel):
+def light(floor):
     lightAllDim()
     if floor == 1:
         GPIO.output(led_1,GPIO.HIGH)
@@ -66,9 +66,9 @@ def light(toLevel):
         pass
 
 def goto(toLevel):
-    GPIO.output(pin_high1, HIGH)
-    GPIO.output(pin_high2, HIGH)
-    GPIO.output(pin_high3, HIGH)
+    GPIO.output(pin_high1, GPIO.HIGH)
+    GPIO.output(pin_high2, GPIO.HIGH)
+    GPIO.output(pin_high3, GPIO.HIGH)
     
     if toLevel == 0 :
         return 0
@@ -76,13 +76,13 @@ def goto(toLevel):
         light(toLevel)
         deltaLevel = toLevel - nowLevel
         if deltaLevel > 0:
-            GPIO.output(pin_3, HIGH)
-            GPIO.output(pin_1, LOW)
+            GPIO.output(pin_3, GPIO.HIGH)
+            GPIO.output(pin_1, GPIO.LOW)
             sleep(step)
             nowLevel = toLevel
         else:
-            GPIO.output(pin_3, HIGH)
-            GPIO.output(pin_1, HIGH)
+            GPIO.output(pin_3, GPIO.HIGH)
+            GPIO.output(pin_1, GPIO.HIGH)
             sleep(step)
             nowLevel = toLevel
         
