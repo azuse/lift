@@ -10,7 +10,6 @@ pin_high1 = 1
 pin_high2 = 12
 pin_high3 = 16
 state = 0
-char text_receieved
 
 ### led pin
 led_1 = 15
