@@ -22,55 +22,55 @@ class lift:
 
     def __init__(self):
         GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(lift.pin_1,GPIO.OUT)
-        GPIO.setup(lift.pin_2,GPIO.OUT)
-        GPIO.setup(lift.pin_3,GPIO.OUT)
-        GPIO.setup(lift.pin_4,GPIO.OUT)
-        GPIO.setup(lift.pin_high1,GPIO.OUT)
-        GPIO.setup(lift.pin_high2,GPIO.OUT)
-        GPIO.setup(lift.pin_high3,GPIO.OUT)
+        GPIO.setup(self.pin_1,GPIO.OUT)
+        GPIO.setup(self.pin_2,GPIO.OUT)
+        GPIO.setup(self.pin_3,GPIO.OUT)
+        GPIO.setup(self.pin_4,GPIO.OUT)
+        GPIO.setup(self.pin_high1,GPIO.OUT)
+        GPIO.setup(self.pin_high2,GPIO.OUT)
+        GPIO.setup(self.pin_high3,GPIO.OUT)
 
-        GPIO.setup(lift.led_1,GPIO.OUT)
-        GPIO.setup(lift.led_2,GPIO.OUT)
-        GPIO.setup(lift.led_3,GPIO.OUT)
-        GPIO.setup(lift.led_4,GPIO.OUT)
-        GPIO.setup(lift.led_5,GPIO.OUT)
-        GPIO.setup(lift.led_6,GPIO.OUT)
+        GPIO.setup(self.led_1,GPIO.OUT)
+        GPIO.setup(self.led_2,GPIO.OUT)
+        GPIO.setup(self.led_3,GPIO.OUT)
+        GPIO.setup(self.led_4,GPIO.OUT)
+        GPIO.setup(self.led_5,GPIO.OUT)
+        GPIO.setup(self.led_6,GPIO.OUT)
 
         nowLevel = 1
 
         step = 1
 
-    def lightAllDim():
-        GPIO.output(lift.led_1,GPIO.LOW)
-        GPIO.output(lift.led_2,GPIO.LOW)
-        GPIO.output(lift.led_3,GPIO.LOW)
-        GPIO.output(lift.led_5,GPIO.LOW)
-        GPIO.output(lift.led_6,GPIO.LOW)
-        GPIO.output(lift.led_4,GPIO.LOW)
+    def lightAllDim(self):
+        GPIO.output(self.led_1,GPIO.LOW)
+        GPIO.output(self.led_2,GPIO.LOW)
+        GPIO.output(self.led_3,GPIO.LOW)
+        GPIO.output(self.led_5,GPIO.LOW)
+        GPIO.output(self.led_6,GPIO.LOW)
+        GPIO.output(self.led_4,GPIO.LOW)
 
 
-    def light(floor):
+    def light(self, floor):
         lightAllDim()
         if floor == 1:
-            GPIO.output(lift.led_1,GPIO.HIGH)
+            GPIO.output(self.led_1,GPIO.HIGH)
         elif floor == 2:
-            GPIO.output(lift.led_2,GPIO.HIGH)
+            GPIO.output(self.led_2,GPIO.HIGH)
         elif floor == 3:
-            GPIO.output(lift.led_3,GPIO.HIGH)
+            GPIO.output(self.led_3,GPIO.HIGH)
         elif floor == 4:
-            GPIO.output(lift.led_4,GPIO.HIGH)
+            GPIO.output(self.led_4,GPIO.HIGH)
         elif floor == 5:
-            GPIO.output(lift.led_5,GPIO.HIGH)
+            GPIO.output(self.led_5,GPIO.HIGH)
         elif floor == 6:
-            GPIO.output(lift.led_6,GPIO.HIGH)
+            GPIO.output(self.led_6,GPIO.HIGH)
         else:
             pass
 
-    def goto(toLevel):
-        GPIO.output(lift.pin_high1, GPIO.HIGH)
-        GPIO.output(lift.pin_high2, GPIO.HIGH)
-        GPIO.output(lift.pin_high3, GPIO.HIGH)
+    def goto(self, toLevel):
+        GPIO.output(self.pin_high1, GPIO.HIGH)
+        GPIO.output(self.pin_high2, GPIO.HIGH)
+        GPIO.output(self.pin_high3, GPIO.HIGH)
         
         if toLevel == 0 :
             return 0
@@ -78,13 +78,13 @@ class lift:
             light(toLevel)
             deltaLevel = toLevel - nowLevel
             if deltaLevel > 0:
-                GPIO.output(lift.pin_3, GPIO.HIGH)
-                GPIO.output(lift.pin_1, GPIO.LOW)
+                GPIO.output(self.pin_3, GPIO.HIGH)
+                GPIO.output(self.pin_1, GPIO.LOW)
                 sleep(step)
                 nowLevel = toLevel
             else:
-                GPIO.output(lift.pin_3, GPIO.HIGH)
-                GPIO.output(lift.pin_1, GPIO.HIGH)
+                GPIO.output(self.pin_3, GPIO.HIGH)
+                GPIO.output(self.pin_1, GPIO.HIGH)
                 sleep(step)
                 nowLevel = toLevel
             
