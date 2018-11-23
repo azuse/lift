@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 from time import sleep
 
-class lift:
+class liftControlUnit:
     ### lift control pin
     pin_1 = 12
     pin_2 = 16
