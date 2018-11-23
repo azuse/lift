@@ -39,18 +39,16 @@ nowLevel = 1
 
 step = 1
 
-def lightAllDim()
-{
+def lightAllDim():
     GPIO.output(led_1,GPIO.LOW)
     GPIO.output(led_2,GPIO.LOW)
     GPIO.output(led_3,GPIO.LOW)
     GPIO.output(led_5,GPIO.LOW)
     GPIO.output(led_6,GPIO.LOW)
     GPIO.output(led_4,GPIO.LOW)
-}
 
-def light(toLevel)
-{
+
+def light(toLevel):
     lightAllDim()
     if floor == 1:
         GPIO.output(led_1,GPIO.HIGH)
@@ -66,7 +64,6 @@ def light(toLevel)
         GPIO.output(led_6,GPIO.HIGH)
     else:
         pass
-}
 
 def goto(toLevel):
     GPIO.output(pin_high1, HIGH)
