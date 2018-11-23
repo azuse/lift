@@ -2,13 +2,13 @@ import RPi.GPIO as GPIO
 from time import sleep
 
 ### lift control pin
-pin_1 = 18
-pin_2 = 23
-pin_3 = 24   #stop
-pin_4 = 25
-pin_high1 = 1
-pin_high2 = 12
-pin_high3 = 16
+pin_1 = 12
+pin_2 = 16
+pin_3 = 18   #stop
+pin_4 = 22
+pin_high1 = 28
+pin_high2 = 32
+pin_high3 = 36
 state = 0
 
 ### led pin
