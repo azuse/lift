@@ -70,7 +70,7 @@ def goto(toLevel):
     GPIO.output(pin_high2, HIGH)
     GPIO.output(pin_high3, HIGH)
     
-    if toLevel = 0 :
+    if toLevel == 0 :
         return 0
     else:
         light(toLevel)
