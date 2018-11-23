@@ -1,0 +1,42 @@
+import RPi.GPIO as GPIO
+from time import sleep
+GPIO.setwarnings(False)
+nowLevel = 0
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(19,GPIO.OUT)
+GPIO.setup(21,GPIO.OUT)
+GPIO.setup(23,GPIO.OUT)
+GPIO.setup(29,GPIO.OUT)
+GPIO.setup(31,GPIO.OUT)
+GPIO.setup(33,GPIO.OUT)
+
+def allLow():
+    GPIO.output(19,GPIO.LOW)
+    GPIO.output(21,GPIO.LOW)
+    GPIO.output(23,GPIO.LOW)
+    GPIO.output(29,GPIO.LOW)
+    GPIO.output(31,GPIO.LOW)
+    GPIO.output(33,GPIO.LOW)
+
+def goto(toLevel):
+    allLow()
+    if toLevel == 0:
+        pass
+    elif toLevel == 1:
+        GPIO.output(33,GPIO.HIGH)
+    elif toLevel == 2:
+        GPIO.output(31,GPIO.HIGH)
+    elif toLevel == 3:
+        GPIO.output(29,GPIO.HIGH)
+    elif toLevel == 4:
+        GPIO.output(23,GPIO.HIGH)
+    elif toLevel == 5:
+        GPIO.output(21,GPIO.HIGH)
+    elif toLevel == 6:
+        GPIO.output(19,GPIO.HIGH)
+    else :
+        return -1
+    sleep(5)
+    return 1
+    
+
