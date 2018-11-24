@@ -2,18 +2,14 @@ import RPi.GPIO as GPIO
 from time import sleep
 import sys
 import signal
-
-
+import serial
 
 class lift:
-    ### lift control pin
-    pin_1 = 12   #方向 -
-    pin_3 = 32   #脱机 -
-    pin_high1 = 26 #脉冲 +
-    pin_high2 = 16 #脱机 +
-    pin_high3 = 36 #方向 +
-    state = 0
-
+    ser = serial.Serial('/dev/ttyUSB0', 9600,timeout=1)
+    ser.write(b'0')
+    sleep(1)
+    ser.write(b'1')
+    sleep(1)
     ### led pin
     led_1 = 15
     led_2 = 23
@@ -21,19 +17,14 @@ class lift:
     led_4 = 31
     led_5 = 33
     led_6 = 37
-
     nowLevel = 1
 
-    step = 100
+    step = 2
     
     def __init__(self):
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(self.pin_1,GPIO.OUT)
-        GPIO.setup(self.pin_3,GPIO.OUT)
-        GPIO.setup(self.pin_high1,GPIO.OUT)
-        GPIO.setup(self.pin_high2,GPIO.OUT)
-        GPIO.setup(self.pin_high3,GPIO.OUT)
+
 
         GPIO.setup(self.led_1,GPIO.OUT)
         GPIO.setup(self.led_2,GPIO.OUT)
@@ -45,20 +36,13 @@ class lift:
         for sig in [signal.SIGINT, signal.SIGHUP, signal.SIGTERM]:
             signal.signal(sig, self.shutdownFunction)
 
-    def printPin(self):
-        print("pin_1 : " + str(GPIO.input(self.pin_1)))
-        print("pin_3 : " + str(GPIO.input(self.pin_3)))
-        print("pin_high1 : " + str(GPIO.input(self.pin_high1)))
-        print("pin_high2 : " + str(GPIO.input(self.pin_high2)))
-        print("pin_high3 : " + str(GPIO.input(self.pin_high3)))
-        print("")
-        print()
 
     def shutdownFunction(self, signalnum, frame):
         print("")
         print("shutting down")
         self.stop()
-        GPIO.cleanup()
+        self.ser.close()
+        self.lightAllDim()
         exit(-1)
 
     def lightAllDim(self):
@@ -88,40 +72,40 @@ class lift:
             pass
 
     def goto(self, toLevel):
-        GPIO.output(self.pin_high1, GPIO.HIGH)
-        GPIO.output(self.pin_high2, GPIO.LOW)
-        GPIO.output(self.pin_high3, GPIO.HIGH)
-        
-        if toLevel == 0 :
-            GPIO.output(self.pin_high2, GPIO.HIGH)
-            GPIO.output(self.pin_high2, GPIO.HIGH)
-            GPIO.output(self.pin_high2, GPIO.HIGH)
-            GPIO.output(self.pin_high2, GPIO.HIGH)
 
+        if toLevel == 0 :
+            self.ser.write(b'b')
+            response = self.ser.readall()
+            print(response)
             print("stopped(maybe")
         else:
             self.light(toLevel)
             deltaLevel = toLevel - self.nowLevel
             if deltaLevel > 0:
-                GPIO.output(self.pin_3, GPIO.HIGH)
-                GPIO.output(self.pin_1, GPIO.LOW)
-                sleep(self.step)
-                self.nowLevel = toLevel
-            else:
-                GPIO.output(self.pin_3, GPIO.HIGH)
-                GPIO.output(self.pin_1, GPIO.HIGH)
-                sleep(self.step)
-                self.nowLevel = toLevel
+                print("going up")
+                self.ser.write(b'w')
 
-        print("gpio changed :")
-        self.printPin()
-    
+                sleep(self.step)
+                response = self.ser.readall()
+                print(response)
+
+                self.nowLevel = toLevel
+                self.stop()
+            else:
+                print("going down")
+                self.ser.write(b's')
+
+                sleep(self.step)
+                response = self.ser.readall()
+                print(response)
+
+                self.nowLevel = toLevel
+                self.stop()
+            
     def stop(self):
         print("info : before stop gpio state")
-        self.printPin()
         self.goto(0)
         print("info : after stop gpio state")
-        self.printPin()
 
 if __name__ == "__main__":
     if(sys.argv[1] == "up"):
@@ -130,7 +114,7 @@ if __name__ == "__main__":
     elif(sys.argv[1] == "down"):
         l = lift()
         l.goto(1)
-    elif(sys.argv[1] == "stop") :
+    elif(sys.argv[1] == "stop"):
         l = lift()
         l.stop()
     

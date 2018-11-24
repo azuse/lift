@@ -5,8 +5,9 @@ import urllib3
 import json
 import lift
 
-write_path = "/home/pi/pipe.out"
+l=lift.lift()
 
+write_path = "/home/pi/pipe.out"
 if os.path.exists(write_path):
     os.remove(write_path)
 
@@ -22,7 +23,7 @@ now_level = 0
 def loadRecord(addr):
     http = urllib3.PoolManager()
     try:
-    	r = http.request('GET', 'http://192.168.43.128:5000/api/loadRecord?device_addr='+ addr)
+    	r = http.request('GET', 'http://192.168.43.97:5000/api/loadRecord?device_addr='+ addr)
     	print(r.data)
     	jsondata = json.loads(r.data.decode('utf-8'))
     	return int(jsondata['to_level'])
@@ -71,7 +72,7 @@ while 1:
             print("不去任何楼层")
             continue
         print("前往楼层 " + str(to_level))
-        print(lift.goto(to_level))
+        print(l.goto(to_level))
         ###调用电梯控制接口
         
 
