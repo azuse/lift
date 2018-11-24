@@ -1,5 +1,6 @@
 import lift
 
-lift.initial()
-lift.goto(3)
-lift.goto(1)
+l = lift.lift()
+l.goto(3)
+l.goto(1)
+l.stop()
