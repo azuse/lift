@@ -92,6 +92,14 @@ class lift:
     
     def stop(self)
         self.goto(0)
+
+if __name__ == "__main__":
+    if(sys.argv[1] == "up"):
+        l = lift()
+        l.goto(6)
+    else if(sysargv[1] == "down")
+        l = lift()
+        l.goto(0)
             
 
         
