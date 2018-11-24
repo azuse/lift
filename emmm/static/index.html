@@ -17,7 +17,7 @@
       <mu-button icon slot="left">
         <mu-icon value="menu"></mu-icon>
       </mu-button>
-      严肃电梯补完计划
+      Our Elevator
       <mu-menu slot="right">
         <mu-button flat><mu-icon value="info"></mu-icon></mu-button>
         <mu-list slot="content">
@@ -45,54 +45,54 @@
         <mu-stepper :active-step="vactiveStep" orientation="vertical">
             <mu-step>
               <mu-step-label>
-                绑定你的设备
+               Bind yor device 
               </mu-step-label>
               <mu-step-content>
-                <mu-form-item  prop="a" label="设备名称">
+                <mu-form-item  prop="a" label="Device Name">
                   <mu-select  v-model="user.addr" full-width>
                     <mu-option v-for="(option,index) in addrlist" :key="index" :label="option.name" :value="option.addr"></mu-option>
                   </mu-select>
                 </mu-form-item>
 
-                <mu-button class="demo-step-button" @click="vhandleNext" color="primary">下一步</mu-button>
+                <mu-button class="demo-step-button" @click="vhandleNext" color="primary">Next</mu-button>
               </mu-step-content>
             </mu-step>
             <mu-step>
               <mu-step-label>
-                选择你常去的楼层
+                Your Level
               </mu-step-label>
               <mu-step-content>
-                <mu-form-item  prop="b" label="到达楼层">
+                <mu-form-item  prop="b" label="">
                   <mu-select  v-model="user.tolevel" full-width>
                     <mu-option v-for="(option,index) in level" :key="index" :label="option" :value="option"></mu-option>
                   </mu-select>
                 </mu-form-item>
-                <mu-button class="demo-step-button" @click="vhandleNext" color="primary">下一步</mu-button>
-                <mu-button flat class="demo-step-button" @click="vhandlePrev">上一步</mu-button>
+                <mu-button class="demo-step-button" @click="vhandleNext" color="primary">Next</mu-button>
+                <mu-button flat class="demo-step-button" @click="vhandlePrev">Prev</mu-button>
               </mu-step-content>
             </mu-step>
             <mu-step>
               <mu-step-label>
-                选择你喜欢的内容
+                Choose your favorite.
               </mu-step-label>
               <mu-step-content>
                 <mu-form-item prop="c" label="">
-                    <mu-checkbox v-model="favorite" value="科技" uncheck-icon="favorite_border" checked-icon="favorite" label="科技"></mu-checkbox>
-                    <mu-checkbox v-model="favorite" value="人文" uncheck-icon="favorite_border" checked-icon="favorite" label="人文"></mu-checkbox>
-                    <mu-checkbox v-model="favorite" value="艺术" uncheck-icon="favorite_border" checked-icon="favorite" label="艺术"></mu-checkbox>
-                    <mu-checkbox v-model="favorite" value="体育" uncheck-icon="favorite_border" checked-icon="favorite" label="体育"></mu-checkbox>
-                    <mu-checkbox v-model="favorite" value="财经" uncheck-icon="favorite_border" checked-icon="favorite" label="财经"></mu-checkbox>
-                    <mu-checkbox v-model="favorite" value="教育" uncheck-icon="favorite_border" checked-icon="favorite" label="教育"></mu-checkbox>
-                    <mu-checkbox v-model="favorite" value="娱乐" uncheck-icon="favorite_border" checked-icon="favorite" label="娱乐"></mu-checkbox>
+                    <mu-checkbox v-model="favorite" value="科技" uncheck-icon="favorite_border" checked-icon="favorite" label="TECH"></mu-checkbox>
+                    <mu-checkbox v-model="favorite" value="人文" uncheck-icon="favorite_border" checked-icon="favorite" label="HUMANITY"></mu-checkbox>
+                    <mu-checkbox v-model="favorite" value="艺术" uncheck-icon="favorite_border" checked-icon="favorite" label="ART"></mu-checkbox>
+                    <mu-checkbox v-model="favorite" value="体育" uncheck-icon="favorite_border" checked-icon="favorite" label="SPORT"></mu-checkbox>
+                    <mu-checkbox v-model="favorite" value="财经" uncheck-icon="favorite_border" checked-icon="favorite" label="FINANCIAL"></mu-checkbox>
+                    <mu-checkbox v-model="favorite" value="教育" uncheck-icon="favorite_border" checked-icon="favorite" label="EDUCATION"></mu-checkbox>
+                    <mu-checkbox v-model="favorite" value="娱乐" uncheck-icon="favorite_border" checked-icon="favorite" label="ENTERTAMENT"></mu-checkbox>
                 </mu-form-item>
-                <mu-button class="demo-step-button" @click="submit" color="primary">完成</mu-button>
-                <mu-button flat class="demo-step-button" @click="vhandlePrev">上一步</mu-button>
+                <mu-button class="demo-step-button" @click="submit" color="primary">Finish</mu-button>
+                <mu-button flat class="demo-step-button" @click="vhandlePrev">Prev</mu-button>
               </mu-step-content>
             </mu-step>
           </mu-stepper>
           <p v-if="vfinished">
             <!-- 都完成啦!<a href="javascript:;" @click="vreset">点这里</a>可以重置 -->
-            恭喜你已经绑定成功，下次来访时可以自动导向楼层，并且自动现实你喜欢的内容。
+            Thank you for your using
           </p>
 
         </mu-form>
@@ -107,9 +107,9 @@
     </mu-container>
 
     <mu-bottom-nav>
-      <mu-bottom-nav-item title="我的电梯"icon="home"></mu-bottom-nav-item>
-      <mu-bottom-nav-item title="二维码扫描"icon="crop_free"></mu-bottom-nav-item>
-      <mu-bottom-nav-item title="打开蓝牙"icon="settings_bluetooth"></mu-bottom-nav-item>
+      <mu-bottom-nav-item title="My"icon="home"></mu-bottom-nav-item>
+      <mu-bottom-nav-item title="Scan"icon="crop_free"></mu-bottom-nav-item>
+      <mu-bottom-nav-item title="Bluetooth"icon="settings_bluetooth"></mu-bottom-nav-item>
     </mu-bottom-nav>
 
 
@@ -142,7 +142,7 @@
             var device_name = json[i].device_name;
             var device_addr = json[i].device_addr;
             console.log(this.addrlist,this.user)
-            addrlistG.unshift({"name":device_name,"addr":device_addr})
+            addrlistG.push({"name":device_name,"addr":device_addr})
             userG.tolevel= json[i].to_level;
             userG.addr= json[i].device_addr;
             console.log(addrlistG,userG)
@@ -157,7 +157,7 @@
         this.$refs.form.validate().then((result) => {
           // console.log('form valid: ', result)
           // console.log(userG.addr,userG.tolevel)
-          fetch("/api/setBinding?device_addr="+userG.addr+"&to_level="+userG.tolevel)
+          fetch("/api/setBinding/"+userG.addr+"/user/"+userG.tolevel)
           console.log(this.favorite)
           this.openSimple = true;
           this.vactiveStep++;

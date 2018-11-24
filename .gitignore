@@ -4,3 +4,5 @@
 */__pycache__/*.pyc
 *.swo
 
+emmm/user.db
+emmm/__pycache__/hello.cpython-37.pyc
