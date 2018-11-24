@@ -19,7 +19,7 @@
       </mu-button>
       严肃电梯补完计划
       <mu-menu slot="right">
-        <mu-button flat>Different Mode</mu-button>
+        <mu-button flat><mu-icon value="info"></mu-icon></mu-button>
         <mu-list slot="content">
           <mu-list-item button>
             <mu-list-item-content>
@@ -41,24 +41,69 @@
     </mu-appbar>
     <mu-container>
       <mu-form :model="form" class="mu-demo-form" ref="form" label-width="100">
-        <mu-form-item  prop="a" label="设备名称">
-          <mu-select  v-model="user.addr" full-width>
-            <mu-option v-for="(option,index) in addrlist" :key="index" :label="option.name" :value="option.addr"></mu-option>
-          </mu-select>
-        </mu-form-item>
-        <mu-form-item  prop="b" label="到达楼层">
-          <mu-select  v-model="user.tolevel" full-width>
-            <mu-option v-for="(option,index) in level" :key="index" :label="option" :value="option"></mu-option>
-          </mu-select>
-        </mu-form-item>
-        <mu-form-item>
+
+        <mu-stepper :active-step="vactiveStep" orientation="vertical">
+            <mu-step>
+              <mu-step-label>
+                绑定你的设备
+              </mu-step-label>
+              <mu-step-content>
+                <mu-form-item  prop="a" label="设备名称">
+                  <mu-select  v-model="user.addr" full-width>
+                    <mu-option v-for="(option,index) in addrlist" :key="index" :label="option.name" :value="option.addr"></mu-option>
+                  </mu-select>
+                </mu-form-item>
+
+                <mu-button class="demo-step-button" @click="vhandleNext" color="primary">下一步</mu-button>
+              </mu-step-content>
+            </mu-step>
+            <mu-step>
+              <mu-step-label>
+                选择你常去的楼层
+              </mu-step-label>
+              <mu-step-content>
+                <mu-form-item  prop="b" label="到达楼层">
+                  <mu-select  v-model="user.tolevel" full-width>
+                    <mu-option v-for="(option,index) in level" :key="index" :label="option" :value="option"></mu-option>
+                  </mu-select>
+                </mu-form-item>
+                <mu-button class="demo-step-button" @click="vhandleNext" color="primary">下一步</mu-button>
+                <mu-button flat class="demo-step-button" @click="vhandlePrev">上一步</mu-button>
+              </mu-step-content>
+            </mu-step>
+            <mu-step>
+              <mu-step-label>
+                选择你喜欢的内容
+              </mu-step-label>
+              <mu-step-content>
+                <mu-form-item prop="c" label="">
+                    <mu-checkbox v-model="favorite" value="科技" uncheck-icon="favorite_border" checked-icon="favorite" label="科技"></mu-checkbox>
+                    <mu-checkbox v-model="favorite" value="人文" uncheck-icon="favorite_border" checked-icon="favorite" label="人文"></mu-checkbox>
+                    <mu-checkbox v-model="favorite" value="艺术" uncheck-icon="favorite_border" checked-icon="favorite" label="艺术"></mu-checkbox>
+                    <mu-checkbox v-model="favorite" value="体育" uncheck-icon="favorite_border" checked-icon="favorite" label="体育"></mu-checkbox>
+                    <mu-checkbox v-model="favorite" value="财经" uncheck-icon="favorite_border" checked-icon="favorite" label="财经"></mu-checkbox>
+                    <mu-checkbox v-model="favorite" value="教育" uncheck-icon="favorite_border" checked-icon="favorite" label="教育"></mu-checkbox>
+                    <mu-checkbox v-model="favorite" value="娱乐" uncheck-icon="favorite_border" checked-icon="favorite" label="娱乐"></mu-checkbox>
+                </mu-form-item>
+                <mu-button class="demo-step-button" @click="submit" color="primary">完成</mu-button>
+                <mu-button flat class="demo-step-button" @click="vhandlePrev">上一步</mu-button>
+              </mu-step-content>
+            </mu-step>
+          </mu-stepper>
+          <p v-if="vfinished">
+            <!-- 都完成啦!<a href="javascript:;" @click="vreset">点这里</a>可以重置 -->
+            恭喜你已经绑定成功，下次来访时可以自动导向楼层，并且自动现实你喜欢的内容。
+          </p>
+
+        </mu-form>
+        <!-- <mu-form-item>
             <mu-button color="primary" @click="submit" class="setB">绑定</mu-button>
           </mu-form-item>
-      </mu-form>
+
       <mu-dialog title="绑定成功" width="360" :open.sync="openSimple">
           恭喜你已经绑定成功，下次来访时可以自动导向楼层。
           <mu-button slot="actions" flat color="primary" @click="closeSimpleDialog">关闭</mu-button>
-      </mu-dialog>
+      </mu-dialog> -->
     </mu-container>
 
     <mu-bottom-nav>
@@ -83,7 +128,9 @@
         form: {
           select: '',
         },
-        openSimple: false
+        openSimple: false,
+        vactiveStep: 0,
+        favorite:[]
     },
     mounted () {
       this.$nextTick(function () {
@@ -111,11 +158,27 @@
           // console.log('form valid: ', result)
           // console.log(userG.addr,userG.tolevel)
           fetch("/api/setBinding?device_addr="+userG.addr+"&to_level="+userG.tolevel)
+          console.log(this.favorite)
           this.openSimple = true;
+          this.vactiveStep++;
         });
       },
       closeSimpleDialog () {
         this.openSimple = false;
+      },
+      vhandleNext () {
+        this.vactiveStep++;
+      },
+      vhandlePrev () {
+        this.vactiveStep--;
+      },
+      vreset () {
+        this.vactiveStep = 0;
+      }
+    },
+    computed: {
+      vfinished () {
+        return this.vactiveStep > 2;
       }
     }
   }).$mount('#app')
@@ -124,6 +187,7 @@
 
 </script>
 <style>
+.mu-demo-form{margin-top: 20px;}
 .mu-bottom-nav{bottom: 0;position: fixed;width:100%}
 .setB{margin:6px auto !important;}
 
