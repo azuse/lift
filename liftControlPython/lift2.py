@@ -1,69 +1,121 @@
 import RPi.GPIO as GPIO
-import time
+from time import sleep
+import sys
+import signal
+import serial
 
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(等下再接线,GPIO.OUT)
-#方向正，低电平正转，高电平反转
-GPIO.setup(等下再接线,GPIO.OUT)
-#脱机正，低电平工作，高电平脱机
-GPIO.setup(等下再接线的LED1,GPIO.OUT)
-GPIO.setup(等下再接线的LED2,GPIO.OUT)
-GPIO.setup(等下再接线的LED3,GPIO.OUT)
-GPIO.setup(等下再接线的LED4,GPIO.OUT)
-GPIO.setup(等下再接线的LED5,GPIO.OUT)
-GPIO.setup(等下再接线的LED6,GPIO.OUT)
-GPIO.setup(等下再接线的LED7,GPIO.OUT)
-GPIO.setup(等下再接线的LED8,GPIO.OUT)
-#在目标楼层亮起灯，作为执行成功的反馈
-#认为整个行程为40cm，划分8个拟似楼层，5cm为一个拟似楼层
-#认为整个状态下移动匀速，即移动相同距离的时间相同
-GPIO.output(等下再接的脱机正,GPIO.HIGH)
-#开机初始化为脱机状态，维持原位置
-b = 1
-#电梯初始在一楼
-c = 0
-#初始化步数
-
-while True:
-    a = 0
-    a = a + input()
-    #读入目标楼层数
-    #认为当前（调试前第一次）拟似电梯轿厢（滑块）的位置为一楼
-    if a = 0:
-        GPIO.output(等下再接线的脱机正,GPIO.HIGH)
-        #当没有输入时，丝杆电机脱机状态
-    else:
-        GPIO.output(等下再接线的LEDa,GPIO.HIGH)
-        #亮起目标楼层的LED灯
-        #b = b
-        #b作为一个寄存器，存放前一个状态
-        c = a - b
-        #c为前后状态的差值，即电梯移动步数
-        if c > 0:
-            #当有输入时，丝杆电机工作状态
-            #后按的人的目标楼层数比前一个大，即电梯需要向上移动，正转
-            GPIO.output(等下再接的方向正,GPIO.LOW)
-            time.sleep(c*等下测一下跑5cm要几秒)
-            #正转c个单位秒数
-            GPIO.output(等下再接的脱机正,GPIO.HIGH)
-            #到达目标楼层，脱机，停止工作
-            GPIO.output(等下再接线的LEDa,GPIO.LOW)
-            #到达目标楼层，目标楼层灯灭
-            b = a
-            #更新寄存器状态
-            time.sleep(0.01)
-        elif c < 0:
-            #当有输入时，丝杆电机工作状态
-            #后按的人的目标楼层数比前一个小，即电梯需要向下移动，反转
-            GPIO.output(等下再接的方向正,GPIO.HIGH)
-            time.sleep(c*等下测一下跑5cm要几秒)
-            #反转c个单位秒数
-            GPIO.output(等下再接的脱机正,GPIO.HIGH)
-            #到达目标楼层，脱机，停止工作
-            GPIO.output(等下再接线的LEDa,GPIO.LOW)
-            #到达目标楼层，目标楼层灯灭
-            b = a
-            #更新寄存器状态
-            time.sleep(0.01)
+class lift:
+    ser = serial.Serial('/dev/ttyUSB0', 9600,timeout=1)
     
+    ### led pin
+    led_1 = 15
+    led_2 = 23
+    led_3 = 29
+    led_4 = 31
+    led_5 = 33
+    led_6 = 37
+    nowLevel = 1
+
+    step = 10
+    
+    def __init__(self):
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BOARD)
+
+
+        GPIO.setup(self.led_1,GPIO.OUT)
+        GPIO.setup(self.led_2,GPIO.OUT)
+        GPIO.setup(self.led_3,GPIO.OUT)
+        GPIO.setup(self.led_4,GPIO.OUT)
+        GPIO.setup(self.led_5,GPIO.OUT)
+        GPIO.setup(self.led_6,GPIO.OUT)
+
+        for sig in [signal.SIGINT, signal.SIGHUP, signal.SIGTERM]:
+            signal.signal(sig, self.shutdownFunction)
+
+
+    def shutdownFunction(self, signalnum, frame):
+        print("")
+        print("shutting down")
+        self.stop()
+        self.ser.close()
+        self.lightAllDim()
+        exit(-1)
+
+    def lightAllDim(self):
+        GPIO.output(self.led_1,GPIO.LOW)
+        GPIO.output(self.led_2,GPIO.LOW)
+        GPIO.output(self.led_3,GPIO.LOW)
+        GPIO.output(self.led_5,GPIO.LOW)
+        GPIO.output(self.led_6,GPIO.LOW)
+        GPIO.output(self.led_4,GPIO.LOW)
+
+
+    def light(self, floor):
+        self.lightAllDim()
+        if floor == 1:
+            GPIO.output(self.led_1,GPIO.HIGH)
+        elif floor == 2:
+            GPIO.output(self.led_2,GPIO.HIGH)
+        elif floor == 3:
+            GPIO.output(self.led_3,GPIO.HIGH)
+        elif floor == 4:
+            GPIO.output(self.led_4,GPIO.HIGH)
+        elif floor == 5:
+            GPIO.output(self.led_5,GPIO.HIGH)
+        elif floor == 6:
+            GPIO.output(self.led_6,GPIO.HIGH)
+        else:
+            pass
+
+    def goto(self, toLevel):
+
+        if toLevel == 0 :
+            self.ser.write(b'b')
+            print("stopped(maybe")
+        else:
+            self.light(toLevel)
+            deltaLevel = toLevel - self.nowLevel
+            if deltaLevel > 0:
+                print("going up")
+                self.ser.write(b'w')
+
+                sleep(self.step)
+                response = self.ser.readall()
+                print(response)
+
+                self.nowLevel = toLevel
+                self.stop()
+            else:
+                print("going down")
+                self.ser.write(b's')
+
+                sleep(self.step)
+                response = self.ser.readall()
+                print(response)
+
+                self.nowLevel = toLevel
+                self.stop()
+            
+    def stop(self):
+        print("info : before stop gpio state")
+        self.goto(0)
+        print("info : after stop gpio state")
+
+if __name__ == "__main__":
+    if(sys.argv[1] == "up"):
+        l = lift()
+        l.goto(6)
+    elif(sys.argv[1] == "down"):
+        l = lift()
+        l.goto(1)
+    elif(sys.argv[1] == "stop"):
+        l = lift()
+        l.stop()
+    
+    GPIO.cleanup()
+
+            
+
+        
 
