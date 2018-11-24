@@ -1,6 +1,12 @@
 import RPi.GPIO as GPIO
 from time import sleep
+<<<<<<< HEAD
 import sys
+=======
+import signal
+def shutdownFunction(signalnum, frame):
+    lift().stop
+>>>>>>> d6c7c640a21e2bb7eb2dbcfdcd8a4db3b3d79c4e
 
 class lift:
     ### lift control pin
@@ -42,7 +48,8 @@ class lift:
         GPIO.setup(self.led_5,GPIO.OUT)
         GPIO.setup(self.led_6,GPIO.OUT)
 
-
+        for sig in [signal.SIGINT, signal.SIGHUP, signal.SIGTERM, signal.SIGKILL]:
+        signal.signal(sig, shutdownFunction)
 
     def lightAllDim(self):
         GPIO.output(self.led_1,GPIO.LOW)
@@ -71,9 +78,9 @@ class lift:
             pass
 
     def goto(self, toLevel):
-        GPIO.output(self.pin_high1, GPIO.HIGH)
+        GPIO.output(self.pin_high1, GPIO.LOW)
         GPIO.output(self.pin_high2, GPIO.HIGH)
-        GPIO.output(self.pin_high3, GPIO.HIGH)
+        GPIO.output(self.pin_high3, GPIO.LOW)
         
         if toLevel == 0 :
             return 0
