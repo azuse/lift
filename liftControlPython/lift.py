@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 from time import sleep
+import sys
 
 class lift:
     ### lift control pin
@@ -97,9 +98,9 @@ if __name__ == "__main__":
     if(sys.argv[1] == "up"):
         l = lift()
         l.goto(6)
-    else if(sysargv[1] == "down")
+    elif(sys.argv[1] == "down"):
         l = lift()
-        l.goto(0)
+        l.goto(1)
             
 
         
