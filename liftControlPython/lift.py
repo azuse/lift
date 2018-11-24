@@ -90,7 +90,7 @@ class lift:
                 sleep(self.step)
                 self.nowLevel = toLevel
     
-    def stop(self)
+    def stop(self):
         self.goto(0)
 
 if __name__ == "__main__":
