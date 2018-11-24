@@ -142,7 +142,7 @@
             var device_name = json[i].device_name;
             var device_addr = json[i].device_addr;
             console.log(this.addrlist,this.user)
-            addrlistG.push({"name":device_name,"addr":device_addr})
+            addrlistG.unshift({"name":device_name,"addr":device_addr})
             userG.tolevel= json[i].to_level;
             userG.addr= json[i].device_addr;
             console.log(addrlistG,userG)

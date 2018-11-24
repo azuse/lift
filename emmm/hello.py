@@ -59,7 +59,7 @@ def getDeviceList():
     conn = sqlite3.connect('user.db')
     print("Opened database successfully")
     c = conn.cursor()
-    cursor=c.execute("SELECT * from log order by id limit 0,10")
+    cursor=c.execute("SELECT * from log order by id desc limit 0,10")
     for row in cursor:
         list.append({
             "device_addr":row[3],
